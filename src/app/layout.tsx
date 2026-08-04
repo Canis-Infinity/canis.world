@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   title: "Canis World",
   description:
     "Canis 的人型犬日常基地，收著生活片段、出遊照片、碎念與基地紀錄。",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.jpg",
+  },
   openGraph: {
     title: "Canis World",
     description: "Canis 的人型犬日常基地。",
