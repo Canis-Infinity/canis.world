@@ -4,7 +4,7 @@
 
 ## 本機啟動
 
-Docker Compose 會啟動在 `7654`，不需要 Dockerfile：
+Docker Compose 會先執行 production build，再將服務啟動在 `7654`，不需要 Dockerfile：
 
 ```powershell
 docker compose up -d --force-recreate

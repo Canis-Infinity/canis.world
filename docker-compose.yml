@@ -3,11 +3,11 @@ services:
     image: node:24-alpine
     container_name: frontend_canis_world
     working_dir: /app
-    command: sh -c "npm ci && npm run dev -- -H 0.0.0.0 -p 7654"
+    command: sh -c "npm ci --include=dev && find .next -mindepth 1 -maxdepth 1 -exec rm -rf {} + && npm run build && npm run start -- -H 0.0.0.0 -p 7654"
     ports:
       - "7654:7654"
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: "1"
       INTERNAL_API_BASE_URL: ${INTERNAL_API_BASE_URL:-http://host.docker.internal:7344}
     volumes:
