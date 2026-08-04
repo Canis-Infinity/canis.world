@@ -77,6 +77,36 @@ function entryImage(entry?: CanisWorldEntry) {
   return resolveAssetUrl(entry?.images?.[0] || "/og.png")
 }
 
+function DailyEntryCard({ entry }: { entry: CanisWorldEntry }) {
+  return (
+    <Card className="h-full overflow-hidden py-0">
+      <AspectRatio ratio={4 / 3}>
+        <Image
+          src={entryImage(entry)}
+          alt={entry.title}
+          fill
+          sizes="(min-width: 1024px) 28vw, 100vw"
+          className="object-cover"
+        />
+      </AspectRatio>
+      <CardHeader className="gap-2 pt-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="secondary">{entry.category || "日常"}</Badge>
+          <Badge variant="outline" className="shrink-0">
+            {formatDate(entry.occurredAt)}
+          </Badge>
+        </div>
+        <CardTitle>{entry.title}</CardTitle>
+      </CardHeader>
+      <CardContent className="pb-4">
+        <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
+          {entry.excerpt || entry.content || "Canis 留下的一小段日常。"}
+        </p>
+      </CardContent>
+    </Card>
+  )
+}
+
 export default async function HomePage() {
   const data = await getCanisWorld()
   const entries = [...(data.entries || [])].sort(
@@ -88,6 +118,7 @@ export default async function HomePage() {
       image: resolveAssetUrl(image),
       title: entry.title,
       date: entry.occurredAt,
+      category: entry.category || "日常",
       description:
         entry.excerpt || entry.content || "Canis 留下的一小段生活畫面。",
     }))
@@ -272,38 +303,10 @@ export default async function HomePage() {
               >
                 {entries.length ? (
                   entries.map((entry) => (
-                    <Card
+                    <DailyEntryCard
                       key={entry._id || entry.title}
-                      className="overflow-hidden"
-                    >
-                      <AspectRatio ratio={16 / 10}>
-                        <Image
-                          src={entryImage(entry)}
-                          alt={entry.title}
-                          fill
-                          sizes="(min-width: 1024px) 28vw, 100vw"
-                          className="object-cover"
-                        />
-                      </AspectRatio>
-                      <CardHeader>
-                        <div className="flex flex-wrap gap-2">
-                          <Badge variant="secondary">
-                            {entry.category || "日常"}
-                          </Badge>
-                          <Badge variant="outline">
-                            {formatDate(entry.occurredAt)}
-                          </Badge>
-                        </div>
-                        <CardTitle>{entry.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="line-clamp-3 text-sm leading-6 text-muted-foreground">
-                          {entry.excerpt ||
-                            entry.content ||
-                            "Canis 留下的一小段日常。"}
-                        </p>
-                      </CardContent>
-                    </Card>
+                      entry={entry}
+                    />
                   ))
                 ) : (
                   <Empty className="col-span-full border">
@@ -323,15 +326,10 @@ export default async function HomePage() {
                 {entries
                   .filter((entry) => entry.featured)
                   .map((entry) => (
-                    <Card key={entry._id || entry.title}>
-                      <CardHeader>
-                        <Badge className="w-fit">精選</Badge>
-                        <CardTitle>{entry.title}</CardTitle>
-                        <CardDescription>
-                          {entry.content || entry.excerpt}
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
+                    <DailyEntryCard
+                      key={entry._id || entry.title}
+                      entry={entry}
+                    />
                   ))}
               </TabsContent>
             </Tabs>
@@ -370,14 +368,13 @@ export default async function HomePage() {
                         />
                       </AspectRatio>
                       <CardHeader className="gap-2 pt-4">
-                        <div className="flex items-center justify-between gap-3">
-                          <CardTitle className="truncate text-base">
-                            {item.title}
-                          </CardTitle>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant="secondary">{item.category}</Badge>
                           <Badge variant="outline" className="shrink-0">
                             {formatDate(item.date)}
                           </Badge>
                         </div>
+                        <CardTitle>{item.title}</CardTitle>
                       </CardHeader>
                       <CardContent className="pb-4">
                         <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
