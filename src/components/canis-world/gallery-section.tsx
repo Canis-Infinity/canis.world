@@ -1,8 +1,7 @@
-import Image from "next/image"
-import { Camera } from "lucide-react"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
+import Link from "next/link"
+import { ArrowRight, Camera } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import {
   Carousel,
   CarouselContent,
@@ -16,64 +15,50 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty"
+import { GalleryItemCard } from "@/components/canis-world/gallery-item-card"
 import type { CanisWorldData } from "@/lib/canis-world-types"
-import {
-  formatCanisWorldDate,
-  type GalleryItem,
-} from "@/lib/canis-world-view-model"
+import type { GalleryItem } from "@/lib/canis-world-view-model"
 
 type GallerySectionProps = {
   content: CanisWorldData["content"]
   gallery: GalleryItem[]
+  totalCount: number
 }
 
-export function GallerySection({ content, gallery }: GallerySectionProps) {
+export function GallerySection({
+  content,
+  gallery,
+  totalCount,
+}: GallerySectionProps) {
   return (
     <section
       id="gallery"
       className="mx-auto w-full max-w-6xl scroll-mt-16 px-4 py-10 sm:px-6"
     >
       <div className="mb-5">
-        <Badge variant="secondary" className="mb-3 gap-1">
-          <Camera className="size-3.5" />
-          {content.galleryBadge}
-        </Badge>
-        <h2 className="text-2xl font-semibold">{content.galleryTitle}</h2>
+        <div>
+          <Badge variant="secondary" className="mb-3 gap-1">
+            <Camera className="size-3.5" />
+            {content.galleryBadge}
+          </Badge>
+          <h2 className="text-2xl font-semibold">{content.galleryTitle}</h2>
+          {totalCount > gallery.length ? (
+            <p className="mt-2 text-sm text-muted-foreground">
+              首頁顯示最近 {gallery.length} 張，完整相簿共有 {totalCount} 張。
+            </p>
+          ) : null}
+        </div>
       </div>
 
       {gallery.length ? (
         <Carousel opts={{ align: "start", loop: gallery.length > 3 }}>
           <CarouselContent>
-            {gallery.slice(0, 12).map((item, index) => (
+            {gallery.map((item, index) => (
               <CarouselItem
                 key={`${item.image}-${index}`}
                 className="basis-[86%] sm:basis-1/2 lg:basis-1/3"
               >
-                <Card className="h-full overflow-hidden py-0">
-                  <AspectRatio ratio={4 / 3}>
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      sizes="(min-width: 1024px) 32vw, (min-width: 640px) 50vw, 86vw"
-                      className="object-cover transition-transform duration-500 hover:scale-105"
-                    />
-                  </AspectRatio>
-                  <CardHeader className="gap-2 pt-4">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge variant="secondary">{item.category}</Badge>
-                      <Badge variant="outline" className="shrink-0">
-                        {formatCanisWorldDate(item.date)}
-                      </Badge>
-                    </div>
-                    <CardTitle>{item.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pb-4">
-                    <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
-                      {item.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                <GalleryItemCard item={item} priority={index === 0} />
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -88,6 +73,17 @@ export function GallerySection({ content, gallery }: GallerySectionProps) {
           </EmptyHeader>
         </Empty>
       )}
+
+      <div className="mt-6 flex justify-center">
+        <Button
+          nativeButton={false}
+          variant="outline"
+          render={<Link href="/gallery" />}
+        >
+          查看更多
+          <ArrowRight className="size-4" />
+        </Button>
+      </div>
     </section>
   )
 }

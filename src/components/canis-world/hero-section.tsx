@@ -11,18 +11,27 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import type { CanisWorldData, CanisWorldEntry } from "@/lib/canis-world-types"
+import { resolveAssetUrl } from "@/lib/asset-url"
 
 type HeroSectionProps = {
   profile: CanisWorldData["profile"]
   status: CanisWorldData["status"]
   featuredEntry: CanisWorldEntry
+  heroImage?: string
 }
 
 export function HeroSection({
   profile,
   status,
   featuredEntry,
+  heroImage,
 }: HeroSectionProps) {
+  const heroImageBelongsToEntry =
+    heroImage && featuredEntry.images?.includes(heroImage)
+  const heroEntry = heroImageBelongsToEntry
+    ? { ...featuredEntry, images: [resolveAssetUrl(heroImage)] }
+    : featuredEntry
+
   return (
     <section className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-12">
       <div className="flex min-h-[calc(100svh-8rem)] flex-col justify-center gap-7">
@@ -93,9 +102,9 @@ export function HeroSection({
         </div>
       </div>
 
-      <div className="grid content-center gap-4">
+      <div className="hidden content-center gap-4 lg:grid">
         <DailyEntryCard
-          entry={featuredEntry}
+          entry={heroEntry}
           priority
           sizes="(min-width: 1024px) 42vw, 100vw"
         />

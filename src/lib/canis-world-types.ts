@@ -31,6 +31,8 @@ export type CanisWorldData = {
   content: {
     headerLinkLabel: string
     headerLinkUrl: string
+    heroImage?: string
+    heroEntryId?: string
     adultTitle: string
     adultDescription: string
     galleryBadge: string

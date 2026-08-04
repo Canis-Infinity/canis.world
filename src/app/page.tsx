@@ -12,6 +12,10 @@ import { createCanisWorldViewModel } from "@/lib/canis-world-view-model"
 export default async function HomePage() {
   const data = await getCanisWorld()
   const viewModel = createCanisWorldViewModel(data)
+  const heroEntry =
+    viewModel.entries.find(
+      (entry) => entry._id === data.content.heroEntryId
+    ) || viewModel.featuredEntry
 
   return (
     <AgeGate>
@@ -23,16 +27,20 @@ export default async function HomePage() {
         <HeroSection
           profile={data.profile}
           status={data.status}
-          featuredEntry={viewModel.featuredEntry}
+          featuredEntry={heroEntry}
+          heroImage={data.content.heroImage}
         />
         <DailySection
           status={data.status}
           content={data.content}
-          entries={viewModel.entries}
           featuredEntries={viewModel.featuredEntries}
           statusProgress={viewModel.statusProgress}
         />
-        <GallerySection content={data.content} gallery={viewModel.gallery} />
+        <GallerySection
+          content={data.content}
+          gallery={viewModel.galleryPreview}
+          totalCount={viewModel.gallery.length}
+        />
         <AboutSection content={data.content} faqs={data.faqs} />
         <FeatureCardsSection cards={data.featureCards} />
         <SiteFooter footer={data.footer} />

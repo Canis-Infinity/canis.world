@@ -11,17 +11,22 @@ export function SectionLink({ href, onClick, ...props }: SectionLinkProps) {
     if (
       event.defaultPrevented ||
       typeof href !== "string" ||
-      !href.startsWith("#")
+      (!href.startsWith("#") && !href.startsWith("/#"))
     ) {
       return
     }
 
-    const target = document.getElementById(decodeURIComponent(href.slice(1)))
+    const targetUrl = new URL(href, window.location.href)
+    if (targetUrl.pathname !== window.location.pathname) return
+
+    const target = document.getElementById(
+      decodeURIComponent(targetUrl.hash.slice(1))
+    )
     if (!target) return
 
     event.preventDefault()
-    if (window.location.hash !== href) {
-      window.history.pushState(null, "", href)
+    if (window.location.hash !== targetUrl.hash) {
+      window.history.pushState(null, "", targetUrl.hash)
     }
     target.scrollIntoView({ behavior: "smooth", block: "start" })
   }

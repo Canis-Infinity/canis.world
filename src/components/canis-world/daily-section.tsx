@@ -21,13 +21,11 @@ import {
   ProgressValue,
 } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { CanisWorldData, CanisWorldEntry } from "@/lib/canis-world-types"
 
 type DailySectionProps = {
   status: CanisWorldData["status"]
   content: CanisWorldData["content"]
-  entries: CanisWorldEntry[]
   featuredEntries: CanisWorldEntry[]
   statusProgress: number
 }
@@ -54,7 +52,6 @@ function EntryGrid({ entries }: { entries: CanisWorldEntry[] }) {
 export function DailySection({
   status,
   content,
-  entries,
   featuredEntries,
   statusProgress,
 }: DailySectionProps) {
@@ -104,21 +101,9 @@ export function DailySection({
           </Alert>
         </div>
 
-        <Tabs defaultValue="all" className="min-w-0">
-          <TabsList>
-            <TabsTrigger value="all">全部</TabsTrigger>
-            <TabsTrigger value="featured">精選</TabsTrigger>
-          </TabsList>
-          <TabsContent value="all" className="mt-4 grid gap-4 sm:grid-cols-2">
-            <EntryGrid entries={entries} />
-          </TabsContent>
-          <TabsContent
-            value="featured"
-            className="mt-4 grid gap-4 sm:grid-cols-2"
-          >
-            <EntryGrid entries={featuredEntries} />
-          </TabsContent>
-        </Tabs>
+        <div className="grid min-w-0 gap-4 sm:grid-cols-2">
+          <EntryGrid entries={featuredEntries} />
+        </div>
       </div>
     </section>
   )
