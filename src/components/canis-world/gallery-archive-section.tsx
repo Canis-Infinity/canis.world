@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import Image from "next/image"
-import { Camera, ChevronLeft, ChevronRight, ImageOff } from "lucide-react"
+import { BookOpen, CalendarRange, Camera, ChevronLeft, ChevronRight, ImageIcon, ImageOff } from "lucide-react"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -34,6 +34,10 @@ type GalleryArchiveSectionProps = {
   totalCount: number
   selectedFrom: string
   selectedTo: string
+  selectedCategory: string
+  selectedKeyword: string
+  selectedSort: "newest" | "oldest"
+  categories: string[]
   rangeLabel: string
 }
 
@@ -42,6 +46,10 @@ export function GalleryArchiveSection({
   totalCount,
   selectedFrom,
   selectedTo,
+  selectedCategory,
+  selectedKeyword,
+  selectedSort,
+  categories,
   rangeLabel,
 }: GalleryArchiveSectionProps) {
   const [visibleGroupCount, setVisibleGroupCount] = useState(GROUP_BATCH_SIZE)
@@ -57,11 +65,6 @@ export function GalleryArchiveSection({
   const previewItem = previewIndex === null ? null : previewItems[previewIndex]
   const hasMore = visibleGroupCount < groups.length
 
-  useEffect(() => {
-    setVisibleGroupCount(GROUP_BATCH_SIZE)
-    setPreviewIndex(null)
-  }, [selectedFrom, selectedTo])
-
   function movePreview(direction: -1 | 1) {
     if (previewIndex === null || previewItems.length < 2) return
     setPreviewIndex(
@@ -71,24 +74,41 @@ export function GalleryArchiveSection({
 
   return (
     <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
-      <div className="mb-8 max-w-2xl">
-        <Badge variant="secondary" className="mb-3 gap-1">
-          <Camera className="size-3.5" />
-          完整相簿
-        </Badge>
-        <h1 className="text-3xl font-semibold sm:text-4xl">
-          被帶回基地的所有畫面
-        </h1>
-        <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">
-          依照每篇日常的標題與日期整理，新的畫面會排在前面。
-        </p>
-        <p className="mt-2 text-xs text-muted-foreground">
-          {rangeLabel}共有 {totalCount} 張照片，來自 {groups.length} 篇日常紀錄。
-        </p>
+      <div className="mb-8">
+        <div className="max-w-2xl">
+          <Badge variant="secondary" className="mb-3 gap-1">
+            <Camera className="size-3.5" />
+            完整相簿
+          </Badge>
+          <h1 className="text-3xl font-semibold sm:text-4xl">
+            被帶回基地的所有畫面
+          </h1>
+          <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">
+            依照每篇日常的標題與日期整理，新的畫面會排在前面。
+          </p>
+        </div>
         <GalleryPeriodFilter
           selectedFrom={selectedFrom}
           selectedTo={selectedTo}
+          selectedCategory={selectedCategory}
+          selectedKeyword={selectedKeyword}
+          selectedSort={selectedSort}
+          categories={categories}
         />
+        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground" aria-label="篩選結果摘要">
+          <span className="inline-flex items-center gap-1.5">
+            <CalendarRange className="size-4" />
+            {rangeLabel}
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <ImageIcon className="size-4" />
+            {totalCount} 張照片
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <BookOpen className="size-4" />
+            {groups.length} 篇日常紀錄
+          </span>
+        </div>
       </div>
 
       {visibleGroups.length ? (
@@ -159,8 +179,8 @@ export function GalleryArchiveSection({
             <EmptyMedia variant="icon">
               <ImageOff />
             </EmptyMedia>
-            <EmptyTitle>這段日期沒有照片</EmptyTitle>
-            <EmptyDescription>可以重新選擇其他日期範圍。</EmptyDescription>
+            <EmptyTitle>沒有符合條件的照片</EmptyTitle>
+            <EmptyDescription>可以調整日期、分類或搜尋關鍵字。</EmptyDescription>
           </EmptyHeader>
         </Empty>
       )}

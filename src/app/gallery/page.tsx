@@ -15,6 +15,9 @@ type GalleryPageProps = {
   searchParams: Promise<{
     from?: string | string[]
     to?: string | string[]
+    category?: string | string[]
+    q?: string | string[]
+    sort?: string | string[]
   }>
 }
 
@@ -45,15 +48,28 @@ function formatRangeLabel(from: Date, to: Date) {
     day: "2-digit",
     timeZone: "UTC",
   })
-  return `${formatter.format(from)} 至 ${formatter.format(to)}，`
+  return `${formatter.format(from)} 至 ${formatter.format(to)}`
+}
+
+function firstParam(value?: string | string[]) {
+  return Array.isArray(value) ? value[0] : value
 }
 
 export default async function GalleryPage({ searchParams }: GalleryPageProps) {
   const data = await getCanisWorld()
   const viewModel = createCanisWorldViewModel(data)
   const params = await searchParams
-  const requestedFrom = Array.isArray(params.from) ? params.from[0] : params.from
-  const requestedTo = Array.isArray(params.to) ? params.to[0] : params.to
+  const requestedFrom = firstParam(params.from)
+  const requestedTo = firstParam(params.to)
+  const requestedCategory = firstParam(params.category) || "all"
+  const requestedKeyword = (firstParam(params.q) || "").trim().slice(0, 100)
+  const requestedSort = firstParam(params.sort) === "oldest" ? "oldest" : "newest"
+  const categoryOptions = Array.from(
+    new Set(viewModel.galleryEntryGroups.map((group) => group.category))
+  ).sort((a, b) => a.localeCompare(b, "zh-Hant"))
+  const selectedCategory = categoryOptions.includes(requestedCategory)
+    ? requestedCategory
+    : "all"
   const entryDates = viewModel.galleryEntryGroups
     .map((group) => getGroupDate(group.date))
     .filter((date): date is Date => Boolean(date))
@@ -77,10 +93,23 @@ export default async function GalleryPage({ searchParams }: GalleryPageProps) {
   const selectedFromDate = requestedRangeIsValid ? parsedFrom : defaultFrom
   const selectedToDate = requestedRangeIsValid ? parsedTo : defaultTo
   const selectedToExclusive = new Date(selectedToDate.getTime() + DAY_IN_MS)
-  const filteredGroups = viewModel.galleryEntryGroups.filter((group) => {
-    const date = getGroupDate(group.date)
-    return date && date >= selectedFromDate && date < selectedToExclusive
-  })
+  const normalizedKeyword = requestedKeyword.toLocaleLowerCase("zh-Hant")
+  const filteredGroups = viewModel.galleryEntryGroups
+    .filter((group) => {
+      const date = getGroupDate(group.date)
+      if (!date || date < selectedFromDate || date >= selectedToExclusive) return false
+      if (selectedCategory !== "all" && group.category !== selectedCategory) return false
+      if (!normalizedKeyword) return true
+
+      return [group.title, group.description, group.category].some((value) =>
+        value.toLocaleLowerCase("zh-Hant").includes(normalizedKeyword)
+      )
+    })
+    .sort((a, b) => {
+      const first = getGroupDate(a.date)?.getTime() || 0
+      const second = getGroupDate(b.date)?.getTime() || 0
+      return requestedSort === "oldest" ? first - second : second - first
+    })
   const filteredPhotoCount = filteredGroups.reduce(
     (count, group) => count + group.items.length,
     0
@@ -94,10 +123,15 @@ export default async function GalleryPage({ searchParams }: GalleryPageProps) {
           linkUrl={data.content.headerLinkUrl}
         />
         <GalleryArchiveSection
+          key={`${formatDateParam(selectedFromDate)}:${formatDateParam(selectedToDate)}:${selectedCategory}:${requestedKeyword}:${requestedSort}`}
           groups={filteredGroups}
           totalCount={filteredPhotoCount}
           selectedFrom={formatDateParam(selectedFromDate)}
           selectedTo={formatDateParam(selectedToDate)}
+          selectedCategory={selectedCategory}
+          selectedKeyword={requestedKeyword}
+          selectedSort={requestedSort}
+          categories={categoryOptions}
           rangeLabel={formatRangeLabel(selectedFromDate, selectedToDate)}
         />
         <SiteFooter footer={data.footer} />
