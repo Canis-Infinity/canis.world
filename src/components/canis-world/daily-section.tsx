@@ -1,3 +1,5 @@
+"use client"
+
 import { Heart, ShieldCheck } from "lucide-react"
 import { DailyEntryCard } from "@/components/canis-world/daily-entry-card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -91,7 +93,7 @@ export function DailySection({
               </div>
               <Progress value={visualStatusProgress}>
                 <ProgressLabel>今日狀態完整度</ProgressLabel>
-                <ProgressValue>{statusProgress}%</ProgressValue>
+                <ProgressValue>{() => `${statusProgress}%`}</ProgressValue>
               </Progress>
             </CardContent>
           </Card>

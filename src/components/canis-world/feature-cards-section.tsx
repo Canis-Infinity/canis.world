@@ -1,5 +1,5 @@
 import { Home } from "lucide-react"
-import { DynamicIcon, iconNames, type IconName } from "lucide-react/dynamic"
+import { DynamicIcon, type IconName } from "lucide-react/dynamic"
 import {
   Card,
   CardDescription,
@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card"
 import type { CanisWorldData } from "@/lib/canis-world-types"
 
-const iconNameSet = new Set<string>(iconNames)
+const iconNameSet = new Set<string>(["home", "map-pin", "calendar"])
 
 function FeatureIcon({ name }: { name?: string }) {
   if (!name || !iconNameSet.has(name)) {
