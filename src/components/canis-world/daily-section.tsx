@@ -55,6 +55,8 @@ export function DailySection({
   featuredEntries,
   statusProgress,
 }: DailySectionProps) {
+  const visualStatusProgress = (statusProgress + 100) / 2
+
   return (
     <section id="daily" className="scroll-mt-16 border-y bg-muted/35">
       <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[0.8fr_1.2fr]">
@@ -87,9 +89,9 @@ export function DailySection({
                   </span>
                 </div>
               </div>
-              <Progress value={statusProgress}>
+              <Progress value={visualStatusProgress}>
                 <ProgressLabel>今日狀態完整度</ProgressLabel>
-                <ProgressValue />
+                <ProgressValue>{statusProgress}%</ProgressValue>
               </Progress>
             </CardContent>
           </Card>

@@ -82,7 +82,7 @@ export function createCanisWorldViewModel(data: CanisWorldData) {
     .filter((group) => group.items.length > 0)
   const statusProgress = Math.min(
     100,
-    Math.max(0, Number(data.status.completeness) || 0)
+    Math.max(-100, Number(data.status.completeness) || 0)
   )
 
   return {

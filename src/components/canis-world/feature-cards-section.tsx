@@ -1,12 +1,5 @@
-import {
-  CalendarDays,
-  Camera,
-  Heart,
-  Home,
-  MapPin,
-  PawPrint,
-  type LucideIcon,
-} from "lucide-react"
+import { Home } from "lucide-react"
+import { DynamicIcon, iconNames, type IconName } from "lucide-react/dynamic"
 import {
   Card,
   CardDescription,
@@ -15,16 +8,14 @@ import {
 } from "@/components/ui/card"
 import type { CanisWorldData } from "@/lib/canis-world-types"
 
-const featureIcons: Record<
-  NonNullable<CanisWorldData["featureCards"][number]["icon"]>,
-  LucideIcon
-> = {
-  home: Home,
-  "map-pin": MapPin,
-  calendar: CalendarDays,
-  "paw-print": PawPrint,
-  heart: Heart,
-  camera: Camera,
+const iconNameSet = new Set<string>(iconNames)
+
+function FeatureIcon({ name }: { name?: string }) {
+  if (!name || !iconNameSet.has(name)) {
+    return <Home className="size-5 text-primary" />
+  }
+
+  return <DynamicIcon name={name as IconName} className="size-5 text-primary" />
 }
 
 export function FeatureCardsSection({
@@ -36,12 +27,10 @@ export function FeatureCardsSection({
     <section className="border-t">
       <div className="mx-auto grid w-full max-w-6xl gap-4 px-4 py-10 sm:px-6 md:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => {
-          const Icon = featureIcons[card.icon || "home"] || Home
-
           return (
             <Card key={card._id || card.title}>
               <CardHeader>
-                <Icon className="size-5 text-primary" />
+                <FeatureIcon name={card.icon} />
                 <CardTitle>{card.title}</CardTitle>
                 <CardDescription>{card.description}</CardDescription>
               </CardHeader>

@@ -1,6 +1,6 @@
 # Canis World
 
-`frontend` 是 `https://canis.world` 的人型犬日常主站。它使用 Next.js、TypeScript、Tailwind v4、Shadcn Base UI、next-themes、nextjs-toploader 與 lucide-react。
+`canis-world` 是 `https://canis.world` 的人型犬日常主站。它使用 Next.js、TypeScript、Tailwind v4、Shadcn Base UI、next-themes、nextjs-toploader 與 lucide-react。
 
 ## 本機啟動
 

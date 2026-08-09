@@ -51,7 +51,7 @@ export type CanisWorldData = {
     _id?: string
     title: string
     description: string
-    icon?: "home" | "map-pin" | "calendar" | "paw-print" | "heart" | "camera"
+    icon?: string
     priority?: number
   }>
   footer: {
