@@ -75,7 +75,7 @@ export function GalleryPeriodFilter({
   return (
     <form
       className="mt-6 grid gap-4 rounded-md border bg-muted/20 p-4"
-      aria-label="相簿日期篩選"
+      aria-label="貼文日期篩選"
       onSubmit={applyFilters}
     >
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-[minmax(16rem,1.35fr)_minmax(10rem,0.7fr)_minmax(14rem,1fr)_minmax(9rem,0.65fr)]">

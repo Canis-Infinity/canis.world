@@ -7,8 +7,8 @@ import { getCanisWorld } from "@/lib/canis-world"
 import { createCanisWorldViewModel } from "@/lib/canis-world-view-model"
 
 export const metadata: Metadata = {
-  title: "完整相簿 | Canis World",
-  description: "依分類整理 Canis World 的日常照片與出遊畫面。",
+  title: "所有貼文 | Canis World",
+  description: "依日期與分類整理 Canis World 的日常貼文。",
 }
 
 type GalleryPageProps = {
@@ -110,11 +110,6 @@ export default async function GalleryPage({ searchParams }: GalleryPageProps) {
       const second = getGroupDate(b.date)?.getTime() || 0
       return requestedSort === "oldest" ? first - second : second - first
     })
-  const filteredPhotoCount = filteredGroups.reduce(
-    (count, group) => count + group.items.length,
-    0
-  )
-
   return (
     <AgeGate>
       <main className="min-h-svh bg-background text-foreground">
@@ -125,7 +120,7 @@ export default async function GalleryPage({ searchParams }: GalleryPageProps) {
         <GalleryArchiveSection
           key={`${formatDateParam(selectedFromDate)}:${formatDateParam(selectedToDate)}:${selectedCategory}:${requestedKeyword}:${requestedSort}`}
           groups={filteredGroups}
-          totalCount={filteredPhotoCount}
+          totalCount={filteredGroups.length}
           selectedFrom={formatDateParam(selectedFromDate)}
           selectedTo={formatDateParam(selectedToDate)}
           selectedCategory={selectedCategory}

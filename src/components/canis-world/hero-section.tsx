@@ -45,7 +45,7 @@ export function HeroSection({
             }
           >
             <span className="flex items-center gap-3">
-              <Avatar className="size-14 rounded-md">
+              <Avatar className="size-12 rounded-md">
                 <AvatarImage src="/avatar.jpg" alt="Canis avatar" />
                 <AvatarFallback>CA</AvatarFallback>
               </Avatar>
@@ -54,7 +54,7 @@ export function HeroSection({
                   <Bone className="size-3.5" />
                   {profile.subtitle}
                 </Badge>
-                <span className="mt-3 block text-4xl font-semibold tracking-normal sm:text-6xl">
+                <span className="mt-3 block text-5xl font-semibold tracking-normal sm:text-7xl lg:text-8xl">
                   {profile.displayName}
                 </span>
               </span>

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, Camera } from "lucide-react"
+import { ArrowRight, Newspaper } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,21 +15,27 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { GalleryItemCard } from "@/components/canis-world/gallery-item-card"
-import type { CanisWorldData } from "@/lib/canis-world-types"
-import type { GalleryItem } from "@/lib/canis-world-view-model"
+import { DailyEntryCard } from "@/components/canis-world/daily-entry-card"
+import type { CanisWorldData, CanisWorldEntry } from "@/lib/canis-world-types"
 
 type GallerySectionProps = {
   content: CanisWorldData["content"]
-  gallery: GalleryItem[]
+  entries: CanisWorldEntry[]
   totalCount: number
 }
 
 export function GallerySection({
   content,
-  gallery,
+  entries,
   totalCount,
 }: GallerySectionProps) {
+  const badgeLabel =
+    content.galleryBadge === "照片牆" ? "貼文" : content.galleryBadge
+  const sectionTitle =
+    content.galleryTitle === "最近被帶回基地的畫面"
+      ? "最近的日常貼文"
+      : content.galleryTitle
+
   return (
     <section
       id="gallery"
@@ -38,38 +44,40 @@ export function GallerySection({
       <div className="mb-5">
         <div>
           <Badge variant="secondary" className="mb-3 gap-1">
-            <Camera className="size-3.5" />
-            {content.galleryBadge}
+            <Newspaper className="size-3.5" />
+            {badgeLabel || "貼文"}
           </Badge>
-          <h2 className="text-2xl font-semibold">{content.galleryTitle}</h2>
-          {totalCount > gallery.length ? (
+          <h2 className="text-2xl font-semibold">
+            {sectionTitle || "最近的日常貼文"}
+          </h2>
+          {totalCount > entries.length ? (
             <p className="mt-2 text-sm text-muted-foreground">
-              首頁顯示最近 {gallery.length} 張，完整相簿共有 {totalCount} 張。
+              首頁顯示最近 {entries.length} 篇，共有 {totalCount} 篇貼文。
             </p>
           ) : null}
         </div>
       </div>
 
-      {gallery.length ? (
-        <Carousel opts={{ align: "start", loop: gallery.length > 3 }}>
-          <CarouselContent>
-            {gallery.map((item, index) => (
+      {entries.length ? (
+        <Carousel opts={{ align: "start", loop: entries.length > 3 }}>
+          <CarouselContent viewportClassName="p-1">
+            {entries.map((entry, index) => (
               <CarouselItem
-                key={`${item.image}-${index}`}
+                key={entry._id || `${entry.title}-${index}`}
                 className="basis-[86%] sm:basis-1/2 lg:basis-1/3"
               >
-                <GalleryItemCard item={item} priority={index === 0} />
+                <DailyEntryCard entry={entry} priority={index === 0} />
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-3 z-10 bg-background/90 hover:bg-background active:bg-background dark:bg-background/90 dark:hover:bg-background dark:active:bg-background" />
-          <CarouselNext className="right-3 z-10 bg-background/90 hover:bg-background active:bg-background dark:bg-background/90 dark:hover:bg-background dark:active:bg-background" />
+          <CarouselPrevious />
+          <CarouselNext />
         </Carousel>
       ) : (
         <Empty className="border">
           <EmptyHeader>
-            <EmptyTitle>相簿還是空的</EmptyTitle>
-            <EmptyDescription>下一次出遊的照片會收進這裡。</EmptyDescription>
+            <EmptyTitle>目前還沒有貼文</EmptyTitle>
+            <EmptyDescription>新的日常發佈後會出現在這裡。</EmptyDescription>
           </EmptyHeader>
         </Empty>
       )}
@@ -80,7 +88,7 @@ export function GallerySection({
           variant="outline"
           render={<Link href="/gallery" />}
         >
-          查看更多
+          查看所有貼文
           <ArrowRight className="size-4" />
         </Button>
       </div>

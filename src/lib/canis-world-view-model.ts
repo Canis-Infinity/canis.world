@@ -16,6 +16,7 @@ export type GalleryEntryGroup = {
   category: string
   description: string
   items: GalleryItem[]
+  entry: CanisWorldEntry
 }
 
 export function formatCanisWorldDate(value?: string) {
@@ -28,11 +29,22 @@ export function formatCanisWorldDate(value?: string) {
   }).format(new Date(value))
 }
 
+export function getCanisWorldEntryKey(entry: CanisWorldEntry, index = 0) {
+  return (
+    entry._id ||
+    `${entry.title || "daily"}-${entry.occurredAt || "undated"}-${index}`
+  )
+}
+
+export function getCanisWorldEntryHref(entry: CanisWorldEntry, index = 0) {
+  return `/daily/${encodeURIComponent(getCanisWorldEntryKey(entry, index))}`
+}
+
 export function createCanisWorldViewModel(data: CanisWorldData) {
   const entries = [...(data.entries || [])].sort(
     (a, b) => (Number(a.priority) || 0) - (Number(b.priority) || 0)
   )
-  const featuredEntries = entries.filter((entry) => entry.featured)
+  const featuredEntries = entries.filter((entry) => entry.featured).slice(0, 2)
   const featuredEntry: CanisWorldEntry = featuredEntries[0] ||
     entries[0] || {
       title: "今天還沒有留下足跡",
@@ -58,6 +70,7 @@ export function createCanisWorldViewModel(data: CanisWorldData) {
     }))
   )
   const galleryPreview = gallery.slice(0, 10)
+  const recentEntries = galleryEntries.slice(0, 10)
   const galleryEntryGroups: GalleryEntryGroup[] = galleryEntries
     .map((entry, entryIndex) => {
       const items = (entry.images || []).map((image) => ({
@@ -77,9 +90,9 @@ export function createCanisWorldViewModel(data: CanisWorldData) {
         description:
           entry.excerpt || entry.content || "Canis 留下的一小段生活畫面。",
         items,
+        entry,
       }
     })
-    .filter((group) => group.items.length > 0)
   const statusProgress = Math.min(
     100,
     Math.max(-100, Number(data.status.completeness) || 0)
@@ -91,6 +104,7 @@ export function createCanisWorldViewModel(data: CanisWorldData) {
     featuredEntry,
     gallery,
     galleryPreview,
+    recentEntries,
     galleryEntryGroups,
     statusProgress,
   }

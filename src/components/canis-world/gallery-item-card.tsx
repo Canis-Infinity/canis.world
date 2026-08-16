@@ -2,6 +2,7 @@ import Image from "next/image"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { shouldBypassImageOptimization } from "@/lib/asset-url"
 import {
   formatCanisWorldDate,
   type GalleryItem,
@@ -27,6 +28,7 @@ export function GalleryItemCard({
           fill
           priority={priority}
           sizes={sizes}
+          unoptimized={shouldBypassImageOptimization(item.image)}
           className="object-cover transition-transform duration-500 hover:scale-105"
         />
       </AspectRatio>

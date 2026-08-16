@@ -1,6 +1,6 @@
 "use client"
 
-import { Heart, ShieldCheck } from "lucide-react"
+import { Heart, ShieldCheck, Star } from "lucide-react"
 import { DailyEntryCard } from "@/components/canis-world/daily-entry-card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
@@ -37,9 +37,9 @@ function EntryGrid({ entries }: { entries: CanisWorldEntry[] }) {
     return (
       <Empty className="col-span-full border">
         <EmptyHeader>
-          <EmptyTitle>今天還沒有新足跡</EmptyTitle>
+          <EmptyTitle>目前沒有精選日常</EmptyTitle>
           <EmptyDescription>
-            Canis 可能正在外面晃，晚點再回來看看。
+            其他日常仍可在照片牆與日常紀錄中查看。
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -105,8 +105,14 @@ export function DailySection({
           </Alert>
         </div>
 
-        <div className="grid min-w-0 gap-4 sm:grid-cols-2">
-          <EntryGrid entries={featuredEntries} />
+        <div className="grid min-w-0 content-start gap-4">
+          <div className="flex items-center gap-2">
+            <Star className="size-4 fill-current text-primary" />
+            <h2 className="text-lg font-semibold">精選日常</h2>
+          </div>
+          <div className="grid min-w-0 gap-4 sm:grid-cols-2">
+            <EntryGrid entries={featuredEntries} />
+          </div>
         </div>
       </div>
     </section>

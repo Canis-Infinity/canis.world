@@ -1,22 +1,9 @@
 import type { Metadata } from "next"
-import { Geist_Mono, Noto_Sans_TC } from "next/font/google"
 import NextTopLoader from "nextjs-toploader"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 import { Providers } from "@/components/providers"
 import { ScrollToTopButton } from "@/components/scroll-to-top-button"
-
-const notoSansTc = Noto_Sans_TC({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://canis.world"),
@@ -47,8 +34,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn(
         "h-full",
         "antialiased",
-        notoSansTc.variable,
-        geistMono.variable,
         "font-sans"
       )}
     >

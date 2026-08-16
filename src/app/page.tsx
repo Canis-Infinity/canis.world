@@ -38,8 +38,8 @@ export default async function HomePage() {
         />
         <GallerySection
           content={data.content}
-          gallery={viewModel.galleryPreview}
-          totalCount={viewModel.gallery.length}
+          entries={viewModel.recentEntries}
+          totalCount={viewModel.entries.length}
         />
         <AboutSection content={data.content} faqs={data.faqs} />
         <FeatureCardsSection cards={data.featureCards} />

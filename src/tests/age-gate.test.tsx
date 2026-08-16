@@ -7,6 +7,7 @@ const STORAGE_KEY = "canis-world-age-confirmed"
 
 describe("AgeGate", () => {
   beforeEach(() => {
+    window.localStorage.clear()
     window.sessionStorage.clear()
     vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
       callback(0)
@@ -19,15 +20,15 @@ describe("AgeGate", () => {
     vi.restoreAllMocks()
   })
 
-  it("在 Hydration 前輸出可見的成人提醒備援畫面", () => {
+  it("在 Hydration 前只鎖定內容，不直接開啟成人提醒", () => {
     const html = renderToString(
       <AgeGate>
         <div>受保護內容</div>
       </AgeGate>
     )
 
-    expect(html).toContain('role="alertdialog"')
-    expect(html).toContain("進入前，先確認一件事")
+    expect(html).not.toContain('role="alertdialog"')
+    expect(html).not.toContain("進入前，先確認一件事")
     expect(html).toContain('aria-hidden="true"')
     expect(html).toContain("受保護內容")
   })
@@ -59,14 +60,32 @@ describe("AgeGate", () => {
     await waitFor(() => {
       expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
     })
-    expect(window.sessionStorage.getItem(STORAGE_KEY)).toBe("yes")
+    expect(window.localStorage.getItem(STORAGE_KEY)).toBe("yes")
     expect(screen.getByTestId("protected-content").parentElement).toHaveAttribute(
       "aria-hidden",
       "false"
     )
   })
 
-  it("目前分頁已確認年齡時直接解除內容鎖定", async () => {
+  it("目前瀏覽器已確認年齡時直接解除內容鎖定", async () => {
+    window.localStorage.setItem(STORAGE_KEY, "yes")
+
+    render(
+      <AgeGate>
+        <div data-testid="protected-content">受保護內容</div>
+      </AgeGate>
+    )
+
+    await waitFor(() => {
+      expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
+      expect(screen.getByTestId("protected-content").parentElement).toHaveAttribute(
+        "aria-hidden",
+        "false"
+      )
+    })
+  })
+
+  it("相容舊版分頁確認狀態", async () => {
     window.sessionStorage.setItem(STORAGE_KEY, "yes")
 
     render(
