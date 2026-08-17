@@ -15,7 +15,7 @@ export function SiteHeader({
     <header className="sticky top-0 z-30 border-b bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <Avatar className="size-8 overflow-hidden rounded-md border">
+          <Avatar className="size-7 overflow-hidden rounded-md border">
             <AvatarImage
               src="/avatar.jpg"
               alt="Canis"

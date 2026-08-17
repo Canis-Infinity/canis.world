@@ -45,7 +45,7 @@ export function HeroSection({
             }
           >
             <span className="flex items-center gap-3">
-              <Avatar className="size-12 rounded-md">
+              <Avatar className="size-20 rounded-md sm:size-24 lg:size-28">
                 <AvatarImage src="/avatar.jpg" alt="Canis avatar" />
                 <AvatarFallback>CA</AvatarFallback>
               </Avatar>
