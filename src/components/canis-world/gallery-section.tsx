@@ -59,7 +59,10 @@ export function GallerySection({
       </div>
 
       {entries.length ? (
-        <Carousel opts={{ align: "start", loop: entries.length > 3 }}>
+        <Carousel
+          className="sm:mx-12"
+          opts={{ align: "start", loop: entries.length > 3 }}
+        >
           <CarouselContent viewportClassName="p-1">
             {entries.map((entry, index) => (
               <CarouselItem
@@ -70,8 +73,8 @@ export function GallerySection({
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="hidden sm:inline-flex" />
+          <CarouselNext className="hidden sm:inline-flex" />
         </Carousel>
       ) : (
         <Empty className="border">
