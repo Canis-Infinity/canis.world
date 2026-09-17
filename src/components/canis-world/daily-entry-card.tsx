@@ -1,10 +1,7 @@
-import Image from "next/image"
+import { SkeletonImage } from "@/components/canis-world/skeleton-image"
 import Link from "next/link"
 import { Star } from "lucide-react"
-import {
-  resolveAssetUrl,
-  shouldBypassImageOptimization,
-} from "@/lib/asset-url"
+import { resolveAssetUrl, shouldBypassImageOptimization } from "@/lib/asset-url"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -34,7 +31,7 @@ export function DailyEntryCard({
     >
       <Card className="h-full overflow-hidden py-0 transition-colors hover:ring-primary/60">
         <AspectRatio ratio={4 / 3}>
-          <Image
+          <SkeletonImage
             src={image}
             alt={entry.title}
             fill

@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import { SkeletonImage } from "@/components/canis-world/skeleton-image"
 import { Expand } from "lucide-react"
 import * as React from "react"
 
@@ -18,10 +18,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
-import {
-  resolveAssetUrl,
-  shouldBypassImageOptimization,
-} from "@/lib/asset-url"
+import { resolveAssetUrl, shouldBypassImageOptimization } from "@/lib/asset-url"
 import { cn } from "@/lib/utils"
 
 type DailyImageGalleryProps = {
@@ -74,9 +71,7 @@ export function DailyImageGallery({ images, title }: DailyImageGalleryProps) {
   return (
     <>
       <section aria-label={`${title}照片`} className="grid gap-4">
-        <MobileImageList
-          images={galleryImages}
-        />
+        <MobileImageList images={galleryImages} />
         <DesktopImageGrid
           images={galleryImages}
           title={title}
@@ -106,7 +101,7 @@ export function DailyImageGallery({ images, title }: DailyImageGalleryProps) {
                   className="h-full pl-0"
                 >
                   <div className="relative h-full min-h-0">
-                    <Image
+                    <SkeletonImage
                       src={image.src}
                       alt={image.alt}
                       fill
@@ -138,11 +133,7 @@ export function DailyImageGallery({ images, title }: DailyImageGalleryProps) {
   )
 }
 
-function MobileImageList({
-  images,
-}: {
-  images: GalleryImage[]
-}) {
+function MobileImageList({ images }: { images: GalleryImage[] }) {
   return (
     <div className="grid gap-4 lg:hidden">
       {images.map((image, index) => (
@@ -150,7 +141,7 @@ function MobileImageList({
           key={`${image.src}-${index}`}
           className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-border bg-muted"
         >
-          <Image
+          <SkeletonImage
             src={image.src}
             alt={image.alt}
             fill
@@ -231,7 +222,7 @@ function GalleryImageButton({
       )}
       onClick={() => onOpen(index)}
     >
-      <Image
+      <SkeletonImage
         src={image.src}
         alt={image.alt}
         fill
@@ -243,7 +234,9 @@ function GalleryImageButton({
       <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/20" />
       <span className="absolute right-3 bottom-3 inline-flex size-8 items-center justify-center rounded-full bg-black/55 text-white opacity-0 ring-1 ring-white/15 backdrop-blur transition group-hover:opacity-100 group-focus-visible:opacity-100">
         <Expand className="size-4" />
-        <span className="sr-only">放大檢視{title}第 {index + 1} 張照片</span>
+        <span className="sr-only">
+          放大檢視{title}第 {index + 1} 張照片
+        </span>
       </span>
     </button>
   )
