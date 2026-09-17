@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { Home, RefreshCw } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -34,7 +35,12 @@ export function ErrorState({
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <Avatar className="size-9 rounded-md border">
               <AvatarImage src="/avatar.jpg" alt="Canis" />
-              <AvatarFallback>CA</AvatarFallback>
+              <AvatarFallback>
+                <Skeleton
+                  aria-hidden="true"
+                  className="size-full rounded-[inherit]"
+                />
+              </AvatarFallback>
             </Avatar>
             <span>Canis World</span>
           </Link>

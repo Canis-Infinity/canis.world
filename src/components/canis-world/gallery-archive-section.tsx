@@ -1,6 +1,8 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, useTransition } from "react"
+import { useRouter } from "next/navigation"
+import { EntrySkeleton } from "@/components/canis-world/entry-skeleton"
 import { BookOpen, CalendarRange, Newspaper } from "lucide-react"
 import { DailyEntryCard } from "@/components/canis-world/daily-entry-card"
 import { GalleryPeriodFilter } from "@/components/canis-world/gallery-period-filter"
@@ -39,6 +41,8 @@ export function GalleryArchiveSection({
   categories,
   rangeLabel,
 }: GalleryArchiveSectionProps) {
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const [visiblePostCount, setVisiblePostCount] = useState(POST_BATCH_SIZE)
   const visibleGroups = useMemo(
     () => groups.slice(0, visiblePostCount),
@@ -68,6 +72,7 @@ export function GalleryArchiveSection({
           selectedKeyword={selectedKeyword}
           selectedSort={selectedSort}
           categories={categories}
+          onNavigate={(href) => startTransition(() => router.push(href))}
         />
         <div
           className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"
@@ -84,7 +89,21 @@ export function GalleryArchiveSection({
         </div>
       </div>
 
-      {visibleGroups.length ? (
+      {isPending ? (
+        <div aria-busy="true">
+          <p role="status" className="sr-only">
+            正在載入篩選結果。
+          </p>
+          <div
+            aria-hidden="true"
+            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {[0, 1, 2, 3, 4, 5].map((index) => (
+              <EntrySkeleton key={index} />
+            ))}
+          </div>
+        </div>
+      ) : visibleGroups.length ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {visibleGroups.map((group, index) => (
             <DailyEntryCard
@@ -111,7 +130,9 @@ export function GalleryArchiveSection({
         <Empty className="border">
           <EmptyHeader>
             <EmptyTitle>沒有符合條件的貼文</EmptyTitle>
-            <EmptyDescription>可以調整日期、分類或搜尋關鍵字。</EmptyDescription>
+            <EmptyDescription>
+              可以調整日期、分類或搜尋關鍵字。
+            </EmptyDescription>
           </EmptyHeader>
         </Empty>
       )}

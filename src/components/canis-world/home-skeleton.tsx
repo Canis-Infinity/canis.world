@@ -1,21 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 
-function EntrySkeleton() {
-  return (
-    <div className="overflow-hidden rounded-lg border bg-card">
-      <Skeleton className="aspect-[4/3] w-full rounded-none" />
-      <div className="space-y-4 p-4">
-        <div className="flex gap-2">
-          <Skeleton className="h-5 w-12" />
-          <Skeleton className="h-5 w-24" />
-        </div>
-        <Skeleton className="h-6 w-3/4" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-2/3" />
-      </div>
-    </div>
-  )
-}
+import { EntrySkeleton } from "@/components/canis-world/entry-skeleton"
 
 export function HomeSkeleton() {
   return (
@@ -85,13 +70,16 @@ export function HomeSkeleton() {
         </div>
         <div className="mx-auto max-w-6xl space-y-5 px-4 py-10 sm:px-6">
           <Skeleton className="h-7 w-48" />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <EntrySkeleton />
-            <div className="hidden sm:block">
-              <EntrySkeleton />
-            </div>
-            <div className="hidden lg:block">
-              <EntrySkeleton />
+          <div className="overflow-hidden sm:mx-12">
+            <div className="-ml-4 flex">
+              {[0, 1, 2].map((index) => (
+                <div
+                  key={index}
+                  className="min-w-0 shrink-0 basis-[86%] pl-4 sm:basis-1/2 lg:basis-1/3"
+                >
+                  <EntrySkeleton />
+                </div>
+              ))}
             </div>
           </div>
         </div>

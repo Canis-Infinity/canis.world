@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
-import { useRouter } from "next/navigation"
 import { format, parseISO } from "date-fns"
 import { RotateCcw, Search } from "lucide-react"
 import type { DateRange } from "react-day-picker"
@@ -24,6 +23,7 @@ type GalleryPeriodFilterProps = {
   selectedKeyword: string
   selectedSort: "newest" | "oldest"
   categories: string[]
+  onNavigate: (href: string) => void
 }
 
 function toDate(value: string) {
@@ -37,8 +37,8 @@ export function GalleryPeriodFilter({
   selectedKeyword,
   selectedSort,
   categories,
+  onNavigate,
 }: GalleryPeriodFilterProps) {
-  const router = useRouter()
   const [draftDate, setDraftDate] = useState<DateRange | undefined>({
     from: toDate(selectedFrom),
     to: toDate(selectedTo),
@@ -62,7 +62,7 @@ export function GalleryPeriodFilter({
     if (category !== "all") params.set("category", category)
     if (keyword.trim()) params.set("q", keyword.trim())
     if (sort === "oldest") params.set("sort", sort)
-    router.push(`/gallery?${params.toString()}`)
+    onNavigate(`/gallery?${params.toString()}`)
   }
 
   function clearFilters() {
@@ -87,14 +87,21 @@ export function GalleryPeriodFilter({
         />
         <Field>
           <FieldLabel htmlFor="gallery-category">分類</FieldLabel>
-          <Select value={category} onValueChange={(value) => setCategory(value || "all")}>
+          <Select
+            value={category}
+            onValueChange={(value) => setCategory(value || "all")}
+          >
             <SelectTrigger id="gallery-category" className="w-full">
-              <SelectValue>{category === "all" ? "所有分類" : category}</SelectValue>
+              <SelectValue>
+                {category === "all" ? "所有分類" : category}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">所有分類</SelectItem>
               {categories.map((item) => (
-                <SelectItem key={item} value={item}>{item}</SelectItem>
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -115,9 +122,16 @@ export function GalleryPeriodFilter({
         </Field>
         <Field>
           <FieldLabel htmlFor="gallery-sort">排序</FieldLabel>
-          <Select value={sort} onValueChange={(value) => setSort(value === "oldest" ? "oldest" : "newest")}>
+          <Select
+            value={sort}
+            onValueChange={(value) =>
+              setSort(value === "oldest" ? "oldest" : "newest")
+            }
+          >
             <SelectTrigger id="gallery-sort" className="w-full">
-              <SelectValue>{sort === "oldest" ? "由舊到新" : "由新到舊"}</SelectValue>
+              <SelectValue>
+                {sort === "oldest" ? "由舊到新" : "由新到舊"}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="newest">由新到舊</SelectItem>
@@ -131,10 +145,7 @@ export function GalleryPeriodFilter({
           <RotateCcw data-icon="inline-start" />
           清除條件
         </Button>
-        <Button
-          type="submit"
-          disabled={!draftDate?.from || !draftDate.to}
-        >
+        <Button type="submit" disabled={!draftDate?.from || !draftDate.to}>
           <Search data-icon="inline-start" />
           套用篩選
         </Button>

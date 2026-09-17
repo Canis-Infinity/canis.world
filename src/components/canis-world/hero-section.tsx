@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Bone, ExternalLink, PawPrint } from "lucide-react"
 import { DailyEntryCard } from "@/components/canis-world/daily-entry-card"
 import { SectionLink } from "@/components/section-link"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -47,7 +48,12 @@ export function HeroSection({
             <span className="flex items-center gap-3">
               <Avatar className="size-20 rounded-md sm:size-24 lg:size-28">
                 <AvatarImage src="/avatar.jpg" alt="Canis avatar" />
-                <AvatarFallback>CA</AvatarFallback>
+                <AvatarFallback>
+                  <Skeleton
+                    aria-hidden="true"
+                    className="size-full rounded-[inherit]"
+                  />
+                </AvatarFallback>
               </Avatar>
               <span>
                 <Badge variant="secondary" className="gap-1">
@@ -64,7 +70,12 @@ export function HeroSection({
             <div className="flex gap-3">
               <Avatar className="size-11 rounded-md">
                 <AvatarImage src="/avatar.jpg" alt="Canis avatar" />
-                <AvatarFallback>CA</AvatarFallback>
+                <AvatarFallback>
+                  <Skeleton
+                    aria-hidden="true"
+                    className="size-full rounded-[inherit]"
+                  />
+                </AvatarFallback>
               </Avatar>
               <div className="min-w-0">
                 <p className="font-medium">{profile.displayName}</p>

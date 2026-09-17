@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ExternalLink } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
@@ -21,7 +22,12 @@ export function SiteHeader({
               alt="Canis"
               className="rounded-md object-cover"
             />
-            <AvatarFallback>CA</AvatarFallback>
+            <AvatarFallback>
+              <Skeleton
+                aria-hidden="true"
+                className="size-full rounded-[inherit]"
+              />
+            </AvatarFallback>
           </Avatar>
           <span>Canis World</span>
         </Link>

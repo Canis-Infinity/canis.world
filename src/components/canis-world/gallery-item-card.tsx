@@ -1,4 +1,4 @@
-import Image from "next/image"
+import { SkeletonImage } from "@/components/canis-world/skeleton-image"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,7 +22,7 @@ export function GalleryItemCard({
   return (
     <Card className="h-full overflow-hidden py-0">
       <AspectRatio ratio={4 / 3}>
-        <Image
+        <SkeletonImage
           src={item.image}
           alt={item.title}
           fill
