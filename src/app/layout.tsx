@@ -1,3 +1,4 @@
+import { ServiceWorkerRegistration } from "@/components/service-worker-registration"
 import type { Metadata } from "next"
 import NextTopLoader from "nextjs-toploader"
 import "./globals.css"
@@ -31,13 +32,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="zh-TW"
       suppressHydrationWarning
-      className={cn(
-        "h-full",
-        "antialiased",
-        "font-sans"
-      )}
+      className={cn("h-full", "antialiased", "font-sans")}
     >
       <body className="min-h-full flex flex-col">
+        <ServiceWorkerRegistration />
         <Providers>
           <NextTopLoader color="var(--primary)" showSpinner={false} />
           {children}
