@@ -53,16 +53,27 @@ export function HomeSkeleton() {
             <EntrySkeleton />
           </div>
         </div>
-        <div className="border-y bg-muted/35">
-          <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[0.8fr_1.2fr]">
-            <div className="space-y-5 rounded-lg border bg-card p-6">
-              <Skeleton className="h-5 w-24" />
-              <Skeleton className="h-7 w-1/2" />
-              {[0, 1, 2, 3].map((index) => (
-                <Skeleton key={index} className="h-5 w-full" />
-              ))}
+        <div className="border-t">
+          <div className="mx-auto max-w-6xl space-y-5 px-4 py-8 sm:px-6">
+            <div className="grid gap-6 rounded-2xl border bg-card p-6 lg:grid-cols-[1fr_2fr]">
+              <div className="space-y-3">
+                <Skeleton className="h-5 w-24" />
+                <Skeleton className="h-7 w-1/2" />
+                <Skeleton className="h-5 w-full" />
+              </div>
+              <div className="space-y-5">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-5 w-full" />
+              </div>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <Skeleton className="h-10 w-full" />
+          </div>
+        </div>
+        <div className="border-y bg-muted/35">
+          <div className="mx-auto max-w-6xl space-y-6 px-4 py-10 sm:px-6">
+            <Skeleton className="h-7 w-28" />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <EntrySkeleton />
               <EntrySkeleton />
               <EntrySkeleton />
             </div>
