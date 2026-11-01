@@ -1,4 +1,6 @@
+import { randomInt } from "node:crypto"
 import { Suspense } from "react"
+import { connection } from "next/server"
 import { HomeSkeleton } from "@/components/canis-world/home-skeleton"
 import { AboutSection } from "@/components/canis-world/about-section"
 import { DailySection } from "@/components/canis-world/daily-section"
@@ -9,7 +11,10 @@ import { SiteFooter } from "@/components/canis-world/site-footer"
 import { AgeGate } from "@/components/age-gate"
 import { SiteHeader } from "@/components/site-header"
 import { getCanisWorld } from "@/lib/canis-world"
-import { createCanisWorldViewModel } from "@/lib/canis-world-view-model"
+import {
+  createCanisWorldViewModel,
+  selectRandomHeroEntry,
+} from "@/lib/canis-world-view-model"
 
 export default function HomePage() {
   return (
@@ -22,11 +27,13 @@ export default function HomePage() {
 }
 
 async function HomeContent() {
+  await connection()
   const data = await getCanisWorld()
   const viewModel = createCanisWorldViewModel(data)
-  const heroEntry =
-    viewModel.entries.find((entry) => entry._id === data.content.heroEntryId) ||
-    viewModel.featuredEntry
+  const heroEntry = selectRandomHeroEntry(
+    viewModel,
+    randomInt(Math.max(viewModel.featuredEntries.length, 1))
+  )
 
   return (
     <main className="min-h-svh bg-background text-foreground">
@@ -38,7 +45,6 @@ async function HomeContent() {
         profile={data.profile}
         status={data.status}
         featuredEntry={heroEntry}
-        heroImage={data.content.heroImage}
       />
       <DailySection
         status={data.status}

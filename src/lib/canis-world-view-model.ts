@@ -38,6 +38,14 @@ export function getCanisWorldEntryHref(entry: CanisWorldEntry, index = 0) {
   return `/daily/${encodeURIComponent(getCanisWorldEntryKey(entry, index))}`
 }
 
+export function selectRandomHeroEntry(
+  viewModel: ReturnType<typeof createCanisWorldViewModel>,
+  randomIndex: number
+) {
+  const { featuredEntries, featuredEntry } = viewModel
+  return featuredEntries[randomIndex] || featuredEntry
+}
+
 export function createCanisWorldViewModel(data: CanisWorldData) {
   const entries = [...(data.entries || [])].sort(
     (a, b) => (Number(a.priority) || 0) - (Number(b.priority) || 0)
@@ -69,8 +77,8 @@ export function createCanisWorldViewModel(data: CanisWorldData) {
   )
   const galleryPreview = gallery.slice(0, 10)
   const recentEntries = galleryEntries.slice(0, 10)
-  const galleryEntryGroups: GalleryEntryGroup[] = galleryEntries
-    .map((entry, entryIndex) => {
+  const galleryEntryGroups: GalleryEntryGroup[] = galleryEntries.map(
+    (entry, entryIndex) => {
       const items = (entry.images || []).map((image) => ({
         image: resolveAssetUrl(image),
         title: entry.title,
@@ -90,7 +98,8 @@ export function createCanisWorldViewModel(data: CanisWorldData) {
         items,
         entry,
       }
-    })
+    }
+  )
   const statusProgress = Math.min(
     100,
     Math.max(-100, Number(data.status.completeness) || 0)
