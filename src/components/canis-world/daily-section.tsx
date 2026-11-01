@@ -47,7 +47,11 @@ function EntryGrid({ entries }: { entries: CanisWorldEntry[] }) {
   }
 
   return entries.map((entry) => (
-    <DailyEntryCard key={entry._id || entry.title} entry={entry} />
+    <DailyEntryCard
+      key={entry._id || entry.title}
+      entry={entry}
+      sizes="(min-width: 1152px) 352px, (min-width: 1024px) 31vw, (min-width: 640px) 46vw, 100vw"
+    />
   ))
 }
 
@@ -61,7 +65,7 @@ export function DailySection({
 
   return (
     <section id="daily" className="scroll-mt-16 border-y bg-muted/35">
-      <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[0.8fr_1.2fr]">
+      <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-3">
         <div className="grid content-start gap-4">
           <Card>
             <CardHeader>
@@ -105,12 +109,12 @@ export function DailySection({
           </Alert>
         </div>
 
-        <div className="grid min-w-0 content-start gap-4">
-          <div className="flex items-center gap-2">
+        <div className="grid min-w-0 content-start gap-4 sm:contents">
+          <div className="flex items-center gap-2 sm:col-span-full sm:row-start-1">
             <Star className="size-4 fill-current text-primary" />
             <h2 className="text-lg font-semibold">精選日常</h2>
           </div>
-          <div className="grid min-w-0 gap-4 sm:grid-cols-2">
+          <div className="grid min-w-0 gap-4 sm:contents">
             <EntryGrid entries={featuredEntries} />
           </div>
         </div>

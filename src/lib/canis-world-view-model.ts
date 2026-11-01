@@ -44,7 +44,7 @@ export function createCanisWorldViewModel(data: CanisWorldData) {
   const entries = [...(data.entries || [])].sort(
     (a, b) => (Number(a.priority) || 0) - (Number(b.priority) || 0)
   )
-  const featuredEntries = entries.filter((entry) => entry.featured).slice(0, 2)
+  const featuredEntries = entries.filter((entry) => entry.featured).slice(0, 5)
   const featuredEntry: CanisWorldEntry = featuredEntries[0] ||
     entries[0] || {
       title: "今天還沒有留下足跡",
