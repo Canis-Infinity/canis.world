@@ -48,11 +48,11 @@ export function DateRangePicker({
           {value?.from ? (
             value.to ? (
               <>
-                {format(value.from, "PPP", { locale: zhTW })} -{" "}
-                {format(value.to, "PPP", { locale: zhTW })}
+                {format(value.from, "yyyy-MM-dd", { locale: zhTW })} -{" "}
+                {format(value.to, "yyyy-MM-dd", { locale: zhTW })}
               </>
             ) : (
-              format(value.from, "PPP", { locale: zhTW })
+              format(value.from, "yyyy-MM-dd", { locale: zhTW })
             )
           ) : (
             <span className="text-muted-foreground">選擇日期範圍</span>

@@ -1,4 +1,5 @@
 import { resolveAssetUrl } from "@/lib/asset-url"
+import { format } from "date-fns"
 import type { CanisWorldData, CanisWorldEntry } from "@/lib/canis-world-types"
 
 export type GalleryItem = {
@@ -22,11 +23,8 @@ export type GalleryEntryGroup = {
 export function formatCanisWorldDate(value?: string) {
   if (!value) return "日常"
 
-  return new Intl.DateTimeFormat("zh-TW", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date(value))
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? "日常" : format(date, "yyyy-MM-dd")
 }
 
 export function getCanisWorldEntryKey(entry: CanisWorldEntry, index = 0) {

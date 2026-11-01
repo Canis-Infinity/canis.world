@@ -42,13 +42,7 @@ function formatDateParam(date: Date) {
 }
 
 function formatRangeLabel(from: Date, to: Date) {
-  const formatter = new Intl.DateTimeFormat("zh-TW", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    timeZone: "UTC",
-  })
-  return `${formatter.format(from)} 至 ${formatter.format(to)}`
+  return `${formatDateParam(from)} 至 ${formatDateParam(to)}`
 }
 
 function firstParam(value?: string | string[]) {

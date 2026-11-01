@@ -1,8 +1,16 @@
 import { describe, expect, it } from "vitest"
 import { fallbackCanisWorld } from "@/lib/canis-world-fallback"
-import { createCanisWorldViewModel } from "@/lib/canis-world-view-model"
+import {
+  createCanisWorldViewModel,
+  formatCanisWorldDate,
+} from "@/lib/canis-world-view-model"
 
 describe("精選日常", () => {
+  it("日期使用補零的年月日格式，缺漏或無效日期保留預設文字", () => {
+    expect(formatCanisWorldDate("2026-07-06T12:00:00")).toBe("2026-07-06")
+    expect(formatCanisWorldDate()).toBe("日常")
+    expect(formatCanisWorldDate("invalid")).toBe("日常")
+  })
   it("依排序顯示最多五篇，並保留其他日常", () => {
     const entries = Array.from({ length: 7 }, (_, index) => ({
       _id: String(index),
